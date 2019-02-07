@@ -28,12 +28,8 @@ void    *add_to_space(t_malloc_space **space, size_t size)
 {
 	t_malloc_node   node;
 
-	// printf("before init space\n");
-	// show_alloc_mem();
 	if (*space == NULL)
 		*space = init_space(size);
-	// printf("after init space\n");
-	// show_alloc_mem();
 	node.size = size;
 	if ((*space)->first == NULL)
 	{
