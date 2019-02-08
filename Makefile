@@ -22,7 +22,7 @@ all: $(NAME)
 
 $(NAME): $(OBJS_DIR) $(OBJS)
 	$(CC) $(CFLAGS) $(INCS) -o $(NAME) -shared $(OBJS)
-	ln -s $(NAME) $(LINK)
+	ln -sf $(NAME) $(LINK)
 
 $(OBJS_DIR):
 	mkdir -p $(OBJS_DIR)

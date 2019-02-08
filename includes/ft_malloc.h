@@ -1,13 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_malloc.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nkamolba <nkamolba@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/02/08 14:08:29 by nkamolba          #+#    #+#             */
+/*   Updated: 2019/02/08 15:58:11 by nkamolba         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef FT_MALLOC_H
 # define FT_MALLOC_H
 
 # include <sys/mman.h>
 # include <unistd.h>
 
-# define TINY_MALLOC_SIZE 4096
-# define TINY_LIST_SIZE 4096 * 100
+# define TINY_MALLOC_SIZE 8
+# define TINY_LIST_SIZE 4096
 
-# define SMALL_MALLOC_SIZE 4096 * 4
+# define SMALL_MALLOC_SIZE 32
 # define SMALL_LIST_SIZE 4096 * 400
 
 typedef struct				s_malloc_node

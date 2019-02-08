@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nkamolba <nkamolba@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/02/08 14:08:46 by nkamolba          #+#    #+#             */
+/*   Updated: 2019/02/08 14:08:48 by nkamolba         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_malloc.h"
 
 int	free_from_space(t_malloc_space *space, void *ptr)
@@ -77,5 +89,4 @@ void    free(void *ptr)
 		return ;
 	if (free_malloc_node(ptr))
 		return ;
-	write(1, "error\n", 6);
 }
