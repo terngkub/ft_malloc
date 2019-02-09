@@ -6,7 +6,7 @@
 /*   By: nkamolba <nkamolba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/08 14:09:00 by nkamolba          #+#    #+#             */
-/*   Updated: 2019/02/09 19:07:59 by nkamolba         ###   ########.fr       */
+/*   Updated: 2019/02/09 19:59:26 by nkamolba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ void    *add_to_space(t_malloc_space **space, size_t space_size, size_t malloc_s
 	if ((*space)->used + malloc_size + sizeof(t_malloc_node) < (*space)->size)
 	{
 		new_space = init_space(space_size, *space);
+		
 		
 	}
 	node.size = malloc_size;
