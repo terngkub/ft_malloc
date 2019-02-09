@@ -6,13 +6,13 @@
 /*   By: nkamolba <nkamolba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/08 14:08:46 by nkamolba          #+#    #+#             */
-/*   Updated: 2019/02/08 14:08:48 by nkamolba         ###   ########.fr       */
+/*   Updated: 2019/02/09 18:14:07 by nkamolba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_malloc.h"
 
-int	free_from_space(t_malloc_space *space, void *ptr)
+static int	free_from_space(t_malloc_space *space, void *ptr)
 {
 	void			*adj_ptr;
 	t_malloc_node	*curr;
@@ -46,7 +46,7 @@ int	free_from_space(t_malloc_space *space, void *ptr)
 	return (0);
 }
 
-int	free_malloc_node(void *ptr)
+static int	free_malloc_node(void *ptr)
 {
 	t_malloc_node	*curr;
 	t_malloc_node	*prev;
@@ -77,11 +77,10 @@ int	free_malloc_node(void *ptr)
 		prev = curr;
 		curr = curr->next;
 	}
-	write(1, "here\n", 5);
 	return (0);
 }
 
-void    free(void *ptr)
+void		free(void *ptr)
 {
 	if (free_from_space(g_malloc_env.tiny, ptr))
 		return ;

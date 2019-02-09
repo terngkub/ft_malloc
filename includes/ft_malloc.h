@@ -6,7 +6,7 @@
 /*   By: nkamolba <nkamolba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/08 14:08:29 by nkamolba          #+#    #+#             */
-/*   Updated: 2019/02/08 15:58:11 by nkamolba         ###   ########.fr       */
+/*   Updated: 2019/02/09 18:49:55 by nkamolba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@
 # include <unistd.h>
 
 # define TINY_MALLOC_SIZE 8
-# define TINY_LIST_SIZE 4096
+# define TINY_SPACE_SIZE 4096
 
 # define SMALL_MALLOC_SIZE 32
-# define SMALL_LIST_SIZE 4096 * 400
+# define SMALL_SPACE_SIZE 4096 * 4
 
 typedef struct				s_malloc_node
 {
@@ -32,6 +32,8 @@ typedef struct				s_malloc_space
 {
 	t_malloc_node			*first;
 	size_t					size;
+	size_t					used;
+	struct s_malloc_space	*next;
 }							t_malloc_space;
 
 typedef struct				s_malloc_env
