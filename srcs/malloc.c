@@ -12,7 +12,7 @@
 
 #include "ft_malloc.h"
 
-void    *do_mmap(size_t size)
+static void	*do_mmap(size_t size)
 {
 	void	*ptr;
 	size_t	allocate_size;
@@ -24,51 +24,45 @@ void    *do_mmap(size_t size)
 	return (ptr);
 }
 
-void	*init_space(size_t size, t_malloc_space *next)
+static void	init_space(t_malloc_space *space, size_t size)
 {
-	void			*ptr;
-	t_malloc_space	space;
-
-	ptr = do_mmap(size);
-	space.first = NULL;
-	space.used = 0;
-	space.size = size;
-	space.next = next;
-	ft_memcpy(ptr, &space, sizeof(t_malloc_space));
-	return (ptr);
+	space->map = do_mmap(size);
+	space->block = NULL;
+	space->ptr = (void *)space->map + sizeof(t_malloc_node);
+	space->size = size;
+	space->used = 0;
 }
 
-void    *add_to_space(t_malloc_space **space, size_t space_size, size_t malloc_size)
+static void	add_block(t_malloc_space *space, size_t malloc_size)
 {
-	t_malloc_space	*new_space;
-	t_malloc_node   node;
+	t_malloc_node	*map;
+	t_malloc_node	block;
 
-	if (*space == NULL)
-		*space = init_space(space_size, NULL);
-	// used size + new size is more than space_size
-	// create new space, set next to be old space,
-	if ((*space)->used + malloc_size + sizeof(t_malloc_node) < (*space)->size)
+	if (space->used + malloc_size + sizeof(t_malloc_node) > space->size)
 	{
-		new_space = init_space(space_size, *space);
-		
-		
+		map = do_mmap(space->size);
+		map->next = space->map;
+		space->map = map;
+		space->ptr = (void *)space->map + sizeof(t_malloc_node);
+		space->used = 0;
 	}
-	node.size = malloc_size;
-	if ((*space)->first == NULL)
-	{
-		node.next = NULL;
-		(*space)->first = (t_malloc_node *)((void *)*space + sizeof(t_malloc_space));
-	}
-	else
-	{
-		node.next = (*space)->first;
-		(*space)->first = (t_malloc_node *)((void *)(*space)->first + sizeof(t_malloc_node) + (*space)->first->size);
-	}
-	ft_memcpy((*space)->first, &node, sizeof(t_malloc_node));
-	return ((void *)(*space)->first + sizeof(t_malloc_node));
+	block.size = malloc_size;
+	block.next = space->block;
+	ft_memcpy(space->ptr, &block, sizeof(t_malloc_node));
+	space->block = space->ptr;
+	space->ptr += sizeof(t_malloc_node) + malloc_size;
+	space->used += sizeof(t_malloc_node) + malloc_size;
 }
 
-void	*add_large_node(size_t size)
+static void	*add_to_space(t_malloc_space *space, size_t malloc_size, size_t space_size)
+{
+	if (space->map == NULL)
+		init_space(space, space_size);
+	add_block(space, malloc_size);
+	return (space->block + sizeof(t_malloc_node));
+}
+
+static void	*add_large_node(size_t size)
 {
 	void			*ptr;
 	t_malloc_node	node;
@@ -76,16 +70,16 @@ void	*add_large_node(size_t size)
 	ptr = do_mmap(size + sizeof(t_malloc_node));
 	node.size = size;
 	node.next = g_malloc_env.large;
-	g_malloc_env.large = (t_malloc_node *)ptr;
 	ft_memcpy(ptr, &node, sizeof(t_malloc_node));
+	g_malloc_env.large = (t_malloc_node *)ptr;
 	return (ptr + sizeof(t_malloc_node));
 }
 
-void	*malloc(size_t size)
+void		*malloc(size_t size)
 {
 	if (size < TINY_MALLOC_SIZE)
-		return (add_to_space(&(g_malloc_env.tiny), size, TINY_SPACE_SIZE));
+		return (add_to_space(&g_malloc_env.tiny, size, TINY_SPACE_SIZE));
 	else if (size < SMALL_MALLOC_SIZE)
-		return (add_to_space(&(g_malloc_env.small), size, SMALL_SPACE_SIZE));
+		return (add_to_space(&g_malloc_env.small, size, SMALL_SPACE_SIZE));
 	return add_large_node(size);
 }

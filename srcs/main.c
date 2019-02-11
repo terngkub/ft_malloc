@@ -26,19 +26,24 @@ void	test_00(void)
 	str3 = (char *)malloc(80);
 	str4 = (char *)malloc(500);
 	str5 = (char *)malloc(100);
-	str6 = (char *)malloc(500);
+	str6 = (char *)malloc(300);
 
 	show_alloc_mem();
+	free(str1);
 
+/*
 	str5 = reaclloc(str5, 6000);
 	show_alloc_mem();
+	*/
 
+/*
 	free(str1);
 	free(str2);
 	free(str3);
 	free(str4);
 	free(str5);
 	free(str6);
+	*/
 }
 
 void	test_01(void)

@@ -64,19 +64,19 @@ void    print_node_address(t_malloc_node *curr)
 
 void show_alloc_mem(void)
 {
-    if (g_malloc_env.tiny)
+    if (g_malloc_env.tiny.block)
     {
         write(1, "TINY ", 5);
-        print_address(g_malloc_env.tiny);
+        print_address(g_malloc_env.tiny.map);
         write(1, "\n", 1);
-        print_node_address(g_malloc_env.tiny->first);
+        print_node_address(g_malloc_env.tiny.block);
     }
-    if (g_malloc_env.small)
+    if (g_malloc_env.small.block)
     {
         write(1, "SMALL ", 6);
-        print_address(g_malloc_env.small);
+        print_address(g_malloc_env.small.map);
         write(1, "\n", 1);
-        print_node_address(g_malloc_env.small->first);
+        print_node_address(g_malloc_env.small.block);
     }
     if (g_malloc_env.large)
     {

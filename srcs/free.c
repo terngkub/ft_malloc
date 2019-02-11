@@ -11,81 +11,58 @@
 /* ************************************************************************** */
 
 #include "ft_malloc.h"
+#include <stdio.h>
 
-static int	free_from_space(t_malloc_space *space, void *ptr)
+static int	clean_node(t_malloc_node *node, int is_large)
 {
-	void			*adj_ptr;
-	t_malloc_node	*curr;
-	t_malloc_node	*prev;
-
-	if (space == NULL || space->first == NULL)
-		return (0);
-	adj_ptr = ptr - sizeof(t_malloc_node);
-	curr = space->first;
-	if (curr == adj_ptr)
-	{
-		space->first = curr->next;
-		curr->size = 0;
-		curr->next = NULL;
-		return (1);
-	}
-	prev = curr;
-	curr = curr->next;
-	while (curr)
-	{
-		if (curr == adj_ptr)
-		{
-			prev->next = curr->next;
-			curr->size = 0;
-			curr->next = NULL;
-			return (1);
-		}
-		prev = curr;
-		curr = curr->next;
-	}
-	return (0);
+	node->next = NULL;
+	if (is_large)
+		munmap(node, calculate_allocate_size(node->size));
+	return (1);
 }
 
-static int	free_malloc_node(void *ptr)
+static int	free_node(t_malloc_node **node, void *ptr, int is_large)
 {
 	t_malloc_node	*curr;
 	t_malloc_node	*prev;
-	void			*adj_ptr;
 
-	curr = g_malloc_env.large;
-	if (curr == NULL)
+	printf("node: %p, curr: %p\n", *node, ptr);
+	if (node == NULL || *node == NULL)
 		return (0);
-	adj_ptr = ptr - sizeof(t_malloc_node);
-	if (curr == adj_ptr)
+	curr = *node;
+	if (curr == ptr)
 	{
-		g_malloc_env.large = curr->next;
-		curr->next = NULL;
-		munmap(curr, calculate_allocate_size(curr->size));
-		return (1);
+		*node = curr->next;
+		return (clean_node(curr, is_large));
 	}
-	prev = curr;
 	curr = curr->next;
+	prev = curr;
 	while (curr)
 	{
-		if (curr == adj_ptr)
+		if (curr == ptr)
 		{
 			prev->next = curr->next;
-			curr->next = NULL;
-			munmap(curr, calculate_allocate_size(curr->size));
-			return (1);
+			return (clean_node(curr, is_large));
 		}
-		prev = curr;
 		curr = curr->next;
+		prev = curr;
 	}
 	return (0);
 }
 
 void		free(void *ptr)
 {
-	if (free_from_space(g_malloc_env.tiny, ptr))
+	void	*adj_ptr;
+
+	printf("ptr: %p\n", ptr);
+	if (ptr == NULL)
 		return ;
-	if (free_from_space(g_malloc_env.small, ptr))
+	adj_ptr = ptr - sizeof(t_malloc_node);
+	if (free_node(&g_malloc_env.tiny.block, adj_ptr, 0))
 		return ;
-	if (free_malloc_node(ptr))
+	if (free_node(&g_malloc_env.small.block, adj_ptr, 0))
 		return ;
+	if (free_node(&g_malloc_env.large, adj_ptr, 1))
+		return ;
+	write(1, "can't find\n", 11);
 }

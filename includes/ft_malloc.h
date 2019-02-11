@@ -16,10 +16,10 @@
 # include <sys/mman.h>
 # include <unistd.h>
 
-# define TINY_MALLOC_SIZE 8
+# define TINY_MALLOC_SIZE 80
 # define TINY_SPACE_SIZE 4096
 
-# define SMALL_MALLOC_SIZE 32
+# define SMALL_MALLOC_SIZE 320
 # define SMALL_SPACE_SIZE 4096 * 4
 
 typedef struct				s_malloc_node
@@ -30,16 +30,17 @@ typedef struct				s_malloc_node
 
 typedef struct				s_malloc_space
 {
-	t_malloc_node			*first;
+	t_malloc_node			*map;
+	t_malloc_node			*block;
+	void					*ptr;
 	size_t					size;
 	size_t					used;
-	struct s_malloc_space	*next;
 }							t_malloc_space;
 
 typedef struct				s_malloc_env
 {
-	t_malloc_space			*tiny;
-	t_malloc_space			*small;
+	t_malloc_space			tiny;
+	t_malloc_space			small;
 	t_malloc_node			*large;
 }							t_malloc_env;
 
