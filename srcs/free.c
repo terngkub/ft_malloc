@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "ft_malloc.h"
-#include <stdio.h>
 
 static int	clean_node(t_malloc_node *node, int is_large)
 {
@@ -26,7 +25,6 @@ static int	free_node(t_malloc_node **node, void *ptr, int is_large)
 	t_malloc_node	*curr;
 	t_malloc_node	*prev;
 
-	printf("node: %p, curr: %p\n", *node, ptr);
 	if (node == NULL || *node == NULL)
 		return (0);
 	curr = *node;
@@ -54,7 +52,6 @@ void		free(void *ptr)
 {
 	void	*adj_ptr;
 
-	printf("ptr: %p\n", ptr);
 	if (ptr == NULL)
 		return ;
 	adj_ptr = ptr - sizeof(t_malloc_node);

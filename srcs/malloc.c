@@ -33,10 +33,11 @@ static void	init_space(t_malloc_space *space, size_t size)
 	space->used = 0;
 }
 
-static void	add_block(t_malloc_space *space, size_t malloc_size)
+static void	*add_block(t_malloc_space *space, size_t malloc_size)
 {
 	t_malloc_node	*map;
 	t_malloc_node	block;
+	void			*ptr;
 
 	if (space->used + malloc_size + sizeof(t_malloc_node) > space->size)
 	{
@@ -49,17 +50,18 @@ static void	add_block(t_malloc_space *space, size_t malloc_size)
 	block.size = malloc_size;
 	block.next = space->block;
 	ft_memcpy(space->ptr, &block, sizeof(t_malloc_node));
+	ptr = space->ptr + sizeof(t_malloc_node);
 	space->block = space->ptr;
 	space->ptr += sizeof(t_malloc_node) + malloc_size;
 	space->used += sizeof(t_malloc_node) + malloc_size;
+	return (ptr);
 }
 
 static void	*add_to_space(t_malloc_space *space, size_t malloc_size, size_t space_size)
 {
 	if (space->map == NULL)
 		init_space(space, space_size);
-	add_block(space, malloc_size);
-	return (space->block + sizeof(t_malloc_node));
+	return (add_block(space, malloc_size));
 }
 
 static void	*add_large_node(size_t size)
