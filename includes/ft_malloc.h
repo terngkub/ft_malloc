@@ -6,7 +6,7 @@
 /*   By: nkamolba <nkamolba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/08 14:08:29 by nkamolba          #+#    #+#             */
-/*   Updated: 2019/02/09 18:49:55 by nkamolba         ###   ########.fr       */
+/*   Updated: 2019/02/13 21:14:10 by nkamolba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # define TINY_MALLOC_SIZE 80
 # define TINY_SPACE_SIZE 4096
 
-# define SMALL_MALLOC_SIZE 320
+# define SMALL_MALLOC_SIZE 4096
 # define SMALL_SPACE_SIZE 4096 * 4
 
 typedef struct				s_malloc_node
@@ -28,10 +28,24 @@ typedef struct				s_malloc_node
 	struct s_malloc_node	*next;
 }							t_malloc_node;
 
+typedef struct				s_malloc_map
+{
+	size_t					used;
+	struct s_malloc_map		*prev;
+	struct s_malloc_map		*next;
+}							t_malloc_map;
+
+typedef struct				s_malloc_block
+{
+	size_t					size;
+	t_malloc_map			*map;
+	struct s_malloc_block	*next;
+}							t_malloc_block;
+
 typedef struct				s_malloc_space
 {
-	t_malloc_node			*map;
-	t_malloc_node			*block;
+	t_malloc_map			*map;
+	t_malloc_block			*block;
 	void					*ptr;
 	size_t					size;
 	size_t					used;
