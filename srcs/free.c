@@ -6,7 +6,7 @@
 /*   By: nkamolba <nkamolba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/08 14:08:46 by nkamolba          #+#    #+#             */
-/*   Updated: 2019/02/13 21:14:56 by nkamolba         ###   ########.fr       */
+/*   Updated: 2019/02/14 18:24:32 by nkamolba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static void	check_map(t_malloc_space *space, t_malloc_map *map)
 	munmap(map, space->size);
 }
 
-static int	free_from_space(t_malloc_space *space, void *ptr)
+int	free_from_space(t_malloc_space *space, void *ptr)
 {
 	t_malloc_block	*curr;
 	t_malloc_block	*prev;
@@ -90,6 +90,7 @@ static int	free_from_space(t_malloc_space *space, void *ptr)
 	return (0);
 }
 
+/*
 void		free(void *ptr)
 {
 	void	*adj_ptr;
@@ -101,9 +102,8 @@ void		free(void *ptr)
 		return ;
 	if (free_from_space(&g_malloc_env.small, adj_ptr))
 		return ;
-		/*
 	if (free_node(&g_malloc_env.large, adj_ptr, 1))
 		return ;
-		*/
 	write(1, "can't find\n", 11);
 }
+*/

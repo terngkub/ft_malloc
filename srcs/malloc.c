@@ -6,7 +6,7 @@
 /*   By: nkamolba <nkamolba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/08 14:09:00 by nkamolba          #+#    #+#             */
-/*   Updated: 2019/02/13 20:53:48 by nkamolba         ###   ########.fr       */
+/*   Updated: 2019/02/14 18:12:17 by nkamolba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,24 +41,30 @@ static void	*add_block(t_malloc_space *space, size_t malloc_size)
 
 static void	add_map(t_malloc_space *space)
 {
-	t_malloc_map	*map;
+	t_malloc_map	map;
+	t_malloc_map	*ptr;
 
-	map = (t_malloc_map *)do_mmap(space->size);
-	map->used = sizeof(t_malloc_map);
-	map->prev = NULL;
-	map->next = space->map;
-	space->map->prev = map;
-	space->map = map;
+	if ((ptr = do_mmap(space->size)) == NULL)
+	{
+		write(1, "error\n", 6);
+		return ;
+	}
+	map.used = sizeof(t_malloc_map);
+	map.prev = NULL;
+	map.next = space->map;
+	ft_memcpy(ptr, &map, sizeof(t_malloc_map));
+	if (space->map)
+		space->map->prev = ptr;
+	space->map = ptr;
 	space->ptr = (void *)space->map + sizeof(t_malloc_map);
 }
 
 static void	init_space(t_malloc_space *space, size_t size)
 {
-	space->map = do_mmap(size);
 	space->block = NULL;
 	space->ptr = (void *)space->map + sizeof(t_malloc_node);
 	space->size = size;
-	space->used = 0;
+	add_map(space);
 }
 
 static void	*add_to_space(t_malloc_space *space, size_t malloc_size, size_t space_size)
@@ -85,9 +91,9 @@ static void	*add_large_node(size_t size)
 
 void		*malloc(size_t size)
 {
-	if (size < TINY_MALLOC_SIZE)
+	if (size <= TINY_MALLOC_SIZE)
 		return (add_to_space(&g_malloc_env.tiny, size, TINY_SPACE_SIZE));
-	else if (size < SMALL_MALLOC_SIZE)
+	else if (size <= SMALL_MALLOC_SIZE)
 		return (add_to_space(&g_malloc_env.small, size, SMALL_SPACE_SIZE));
 	return add_large_node(size);
 }

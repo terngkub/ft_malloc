@@ -6,7 +6,7 @@
 /*   By: nkamolba <nkamolba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/08 14:09:20 by nkamolba          #+#    #+#             */
-/*   Updated: 2019/02/08 14:09:21 by nkamolba         ###   ########.fr       */
+/*   Updated: 2019/02/14 17:29:21 by nkamolba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ void    print_node_address(t_malloc_node *curr)
     }
 }
 
+/*
 void show_alloc_mem(void)
 {
     if (g_malloc_env.tiny.block)
@@ -86,3 +87,4 @@ void show_alloc_mem(void)
         print_node_address(g_malloc_env.large);
     }
 }
+*/
