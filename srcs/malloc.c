@@ -6,7 +6,7 @@
 /*   By: nkamolba <nkamolba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/08 14:09:00 by nkamolba          #+#    #+#             */
-/*   Updated: 2019/02/14 18:12:17 by nkamolba         ###   ########.fr       */
+/*   Updated: 2019/02/14 22:49:15 by nkamolba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,9 +91,16 @@ static void	*add_large_node(size_t size)
 
 void		*malloc(size_t size)
 {
+	write(1, "malloc\n", 7);
 	if (size <= TINY_MALLOC_SIZE)
+	{
+		write(1, "malloc tiny\n", 12);
 		return (add_to_space(&g_malloc_env.tiny, size, TINY_SPACE_SIZE));
+	}
 	else if (size <= SMALL_MALLOC_SIZE)
+	{
+		write(1, "malloc small\n", 13);
 		return (add_to_space(&g_malloc_env.small, size, SMALL_SPACE_SIZE));
+	}
 	return add_large_node(size);
 }

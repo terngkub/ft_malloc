@@ -6,7 +6,7 @@
 /*   By: nkamolba <nkamolba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/08 14:09:12 by nkamolba          #+#    #+#             */
-/*   Updated: 2019/02/14 18:24:51 by nkamolba         ###   ########.fr       */
+/*   Updated: 2019/02/14 18:32:17 by nkamolba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,6 @@ void    *reaclloc(void *ptr, size_t size)
     if ((new_ptr = malloc(size)))
         return (NULL);
     ft_memcpy(new_ptr, ptr, new_size);
-    //free(ptr);
+    free(ptr);
     return new_ptr;
 }
